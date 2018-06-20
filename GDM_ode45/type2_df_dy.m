@@ -21,7 +21,7 @@ a=(1/Nt)^(1/3);       % lattice constant, unit: m
 L = Nx*a;
 epi0=8.854187817e-12;
 e=1.602176565e-19;     % unit in Coulomb
-T = 189;                % temperature in K
+T = 298;                % temperature in K
 kbT=1.38e-23*T/e;          % unit: eV
 esig = 0.14;        % in eV
 esig_interface=esig;       % Disorder strength, unit: eV
@@ -48,8 +48,8 @@ warning_flag = 0;
 ode_solver = 'ode15s';
 %% ========================================= Enters main loop =============================================
 
-J = 1000;
-% J = [0.01 0.1 1 10 100 1000 1e4];
+%J = 1000;
+J = [0.01 0.1 1 10 100 1000 1e4];
 % J = logspace(-2,4,40)';
 calculate_density_flag = true;
 tolerence = 1e-8;

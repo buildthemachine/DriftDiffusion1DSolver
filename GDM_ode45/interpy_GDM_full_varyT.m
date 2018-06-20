@@ -21,7 +21,7 @@ a=(1/Nt)^(1/3);       % lattice constant, unit: m
 L = Nx*a;
 epi0=8.854187817e-12;
 e=1.602176565e-19;     % unit in Coulomb
-T = 255;                % temperature in K
+T = 298;                % temperature in K
 kbT=1.38e-23*T/e;          % unit: eV
 esig = 0.14;        % in eV
 esig_interface=esig;       % Disorder strength, unit: eV
@@ -46,9 +46,10 @@ delta = 2*(log((esig/kbT)^2-esig/kbT)-log(log(4)))/(esig/kbT)^2;
 warning_flag = 0;
 %% ========================================= Enters main loop =============================================
 
-J = logspace(-2,4,40)';
+% J = logspace(-2,4,40)';
+J = [0.01 0.1 1 10 100 1000 1e4];
 % J = 1e2;
-calculate_density_flag = true;
+calculate_density_flag = false; %true;
 
 tolerence = 1e-8;
 f_upper = 12800;    % tspan parameter in ode45 (see Matlab manual)
@@ -64,6 +65,8 @@ for m=1:length(J)
             disp(m);
         end
         % dimensionless parameters defined in Appendix B
+        % Please note the kbT here is in units of eV so 'e' is absorbed
+        % into it.
         gamma1 = e*L^2/(epi0*epir*kbT)*n1;
         gamma2 = e*L^2/(epi0*epir*kbT)*n2;
         i = 1/kbT^2*(Nx*a)^3/(epi0*epir*mu0)*J(m);
@@ -244,7 +247,8 @@ for p=m+type1_success_flag:length(J)
         result(p,2) = J(p);
         
         if calculate_density_flag
-            coef_n = [delta,kbT,mu0,L,Nt,epi0,epir,e,a,esig,J(p)];
+            % The following line has been changed on 6/19/2018, added n1:
+            coef_n = [delta,kbT,mu0,L,Nt,epi0,epir,e,a,esig,n1,J(p)];
             density = calc_density(coef_n,f_end,y_end);
             density_all = [density_all density];
             semilogy(density(:,1),density(:,2));
